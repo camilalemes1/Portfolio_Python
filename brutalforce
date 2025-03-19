@@ -1,0 +1,36 @@
+from zipfile import ZipFile
+
+# Function to attempt to extract the zip file with the given password
+def attempt_extract(zf_handle, password):
+    try:
+        # Try to extract the contents of the zip file with the password
+        zf_handle.extractall(pwd=password.encode())  # The password needs to be encoded
+        return True  # Correct password
+    except:
+        return False  # Incorrect password
+
+def main():
+    # File paths
+    zip_path = r''
+    txt_path = r''
+
+    print("[+] Starting brute-force")
+
+    # Opening the zip file
+    with ZipFile(zip_path) as zf:
+        # Opening the password file (arquivo.txt)
+        with open(txt_path, 'r') as f:
+            # Iterating through each password in the text file
+            for line in f:
+                password = line.strip()  # Removing extra spaces and newlines
+                print(f"Trying password: {password}")
+
+                # Attempting extraction with the current password
+                if attempt_extract(zf, password):
+                    print(f"[+] Password found: {password}")
+                    break  # If the password is correct, exit the loop
+
+    print("[+] Brute-force attempt completed.")
+
+if __name__ == "__main__":
+    main()
